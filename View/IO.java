@@ -1,36 +1,40 @@
 package View;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class IO {
-    public int readInt(String msg) {
+    public static int readInt(String msg) {
         Scanner teclado = new Scanner(System.in);
-        int value = 0;
         boolean isValidInput = false;
+        int value = 0;
 
         while (!isValidInput) {
             try {
                 System.out.print(msg);
-                value = Integer.parseInt(teclado.nextLine());
+                value = teclado.nextInt();
                 isValidInput = true;
-            } catch (NumberFormatException ex) {
+            } catch (InputMismatchException e) {
                 System.out.println("Error, Ingresa un número válido.");
+                teclado.nextLine();
             }
         }
         return value;
     }
-    public int readString(String msg) {
+
+    public static String readString(String msg) {
         Scanner teclado = new Scanner(System.in);
-        int value = 0;
+        String value = "";
         boolean isValidInput = false;
 
         while (!isValidInput) {
             try {
                 System.out.print(msg);
-                value = Integer.parseInt(teclado.nextLine());
+                value = teclado.nextLine();
                 isValidInput = true;
-            } catch (NumberFormatException ex) {
-                System.out.println("Error, Ingresa un número válido.");
+            } catch (InputMismatchException e) {
+                System.out.println("Error, Ingresa una cadena válida.");
+                teclado.nextLine();
             }
         }
         return value;
