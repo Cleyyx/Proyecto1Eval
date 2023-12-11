@@ -14,9 +14,4 @@ public class Menu {
         }
         return playerNames;
     }
-    public void step3_PlayGame() {
-        Scanner teclado = new Scanner(System.in);
-        System.out.print("Pulsa una tecla para iniciar el juego...");
-        teclado.nextLine();
-    }
 }

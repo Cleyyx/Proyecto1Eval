@@ -31,7 +31,7 @@ public class Deck {
         }
     }
 
-    public Card drawCard() {
+    public Card drawRandomCard() {
         if (isEmpty()) {
             System.out.println("El mazo está vacio, no puedes extraer mas cartas.");
         }
