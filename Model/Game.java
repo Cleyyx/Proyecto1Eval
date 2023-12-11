@@ -1,13 +1,18 @@
 package Model;
 
+import View.IO;
 import View.Menu;
 public class Game {
     private Player[] players;
     private Deck deck;
+    private int currentRound;
 
     public Game(Player[] players, Deck deck) {
         this.players = players;
         this.deck = deck;
+    }
+    public Game(){
+
     }
 
     public void startGame() {
@@ -33,8 +38,10 @@ public class Game {
         endGame();
     }
 
-    private void playRounds() {
+    public void playRounds() {
+        currentRound = 0;
         while (!isGameOver()) {
+            currentRound++;
             for (Player player : players) {
                 playRound(player);
             }
@@ -42,18 +49,46 @@ public class Game {
     }
 
     private void playRound(Player player) {
-
+        System.out.println("Comienza la ronda para " + player.getName());
+        player.resetHand();
+        dealInitialCards(player);
+        playerTurn(player);
+        if (player.getPoints() <= 21) {
+            player.calculatePoints();
+            determineWinner(player);
+        } else {
+            System.out.println(player.getName() + " se pasa de 21. ¡Pierdes la ronda!");
+        }
+        displayGameStatus();
     }
 
+    public void playerTurn(Player player) {
+        boolean entradaValida = false;
+        while (!entradaValida && player.getPoints() <= 21) {
+            String choice = IO.readString(player.getName() + ", ¿quieres pedir carta (hit) o quedarte (stand)?");
+            if (choice.equals("hit")) {
+                Card card = deck.drawRandomCard();
+                player.addCardToHand(card);
+                System.out.println(player.getName() + " recibe la carta: " + card);
+            } else if (choice.equals("stand")) {
+                entradaValida = true;
+            } else {
+                System.out.println("Por favor, ingresa 'hit' o 'stand'.");
+            }
+        }
+        if (player.getPoints() > 21) {
+            System.out.println(player.getName() + " se pasa de 21. ¡Perdiste el turno!");
+        }
+    }
 
-    private void dealInitialCards(Player player) {
+    public void dealInitialCards(Player player) {
         for (int i = 0; i < 2; i++) {
             Card card = deck.drawRandomCard();
             player.addCardToHand(card);
         }
     }
 
-    private void determineWinner(Player currentPlayer) {
+    public void determineWinner(Player currentPlayer) {
         int currentPlayerPoints = currentPlayer.getPoints();
         System.out.println("Player Points: " + currentPlayerPoints);
         Player winner = null;
@@ -90,11 +125,11 @@ public class Game {
         }
     }
 
-    private boolean isGameOver() {
+    public boolean isGameOver() {
         return false;
     }
 
-    private Player determineOverallWinner() {
+    public Player determineOverallWinner() {
         Player overallWinner = null;
         int highestPoints = 0;
         for (Player player : players) {
@@ -109,10 +144,35 @@ public class Game {
         return overallWinner;
     }
 
-    private void endGame() {
+    public void displayGameStatus() {
+        System.out.println("Estado actual del juego:");
 
-        // Mostrar resultados de cada jugador en la partida
+        for (Player player : players) {
+            System.out.print("Mano de " + player.getName() + ": ");
+            for (Card card : player.getHand()) {
+                if (card != null) {
+                    System.out.print(card + " ");
+                }
+            }
+            System.out.println("\nPuntos de " + player.getName() + ": " + player.getPoints());
+            System.out.println("-------------------------------------");
+        }
 
+        System.out.println("Estado del mazo:");
+        for (Card card : deck.getCards()) {
+            if (card != null) {
+                System.out.print(card + " ");
+            }
+        }
+        System.out.println("\n-------------------------------------");
+    }
+
+
+    public void endGame() {
+
+        for (Player player : players) {
+            System.out.println("Los puntos finales de " +player.getName() +" son: "+ player.getPoints());
+        }
         Player overallWinner = determineOverallWinner();
         if (overallWinner != null) {
             System.out.println("¡" + overallWinner.getName() + " es el ganador del juego!");

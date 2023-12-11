@@ -33,10 +33,13 @@ public class Card {
 
     @Override
     public String toString() {
-        return "Card{" +
-                "value=" + value +
-                ", suit='" + suit + '\'' +
-                '}';
+        return "┌─────────┐\n" +
+                String.format("│ %-2s      │\n", value) +
+                "│         │\n" +
+                String.format("│    %s    │\n", suit) +
+                "│         │\n" +
+                String.format("│      %-2s │\n", value) +
+                "└─────────┘";
     }
 
     @Override

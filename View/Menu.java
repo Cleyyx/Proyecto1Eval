@@ -1,8 +1,5 @@
 package View;
 
-import java.util.Scanner;
-import View.IO;
-
 public class Menu {
     public int step1_SelectNPlayers() {
         return IO.readInt("Ingresa el número de jugadores: ");
