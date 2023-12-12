@@ -2,6 +2,7 @@ package Model;
 
 import View.IO;
 import View.Menu;
+
 public class Game {
     private Player[] players;
     private Deck deck;
@@ -23,7 +24,8 @@ public class Game {
         int numPlayers = menu.step1_SelectNPlayers();
         String[] playerNames = menu.step2_SelectPlayerNames(numPlayers);
 
-        Player[] players = new Player[numPlayers];
+        players = new Player[numPlayers];
+
         for (int i = 0; i < numPlayers; i++) {
             players[i] = new Player(playerNames[i]);
         }
@@ -35,8 +37,9 @@ public class Game {
 
         game.playRounds();
 
-        endGame();
+        game.endGame();
     }
+
 
     public void playRounds() {
         currentRound = 0;
@@ -51,123 +54,87 @@ public class Game {
     private void playRound(Player player) {
         System.out.println("Comienza la ronda para " + player.getName());
         player.resetHand();
+
         dealInitialCards(player);
+        displayPlayerHand(player);
+
         playerTurn(player);
-        if (player.getPoints() <= 21) {
-            player.calculatePoints();
-            determineWinner(player);
-        } else {
-            System.out.println(player.getName() + " se pasa de 21. ¡Pierdes la ronda!");
-        }
+        player.calculatePoints();
+
         displayGameStatus();
+        determineWinner();
+
     }
 
     public void playerTurn(Player player) {
-        boolean entradaValida = false;
-        while (!entradaValida && player.getPoints() <= 21) {
+        boolean entradaValida = true;
+
+        do {
             String choice = IO.readString(player.getName() + ", ¿quieres pedir carta (hit) o quedarte (stand)?");
             if (choice.equals("hit")) {
                 Card card = deck.drawRandomCard();
                 player.addCardToHand(card);
                 System.out.println(player.getName() + " recibe la carta: " + card);
+                player.calculatePoints();
+                System.out.println(player.getName() + " tiene ahora " + player.getPoints() + " puntos.");
+                if (player.getPoints() > 21) {
+                    System.out.println(player.getName() + " se pasa de 21. ¡Perdiste el turno!");
+                    entradaValida = false;
+                }
             } else if (choice.equals("stand")) {
-                entradaValida = true;
+                entradaValida = false;
             } else {
                 System.out.println("Por favor, ingresa 'hit' o 'stand'.");
             }
-        }
-        if (player.getPoints() > 21) {
-            System.out.println(player.getName() + " se pasa de 21. ¡Perdiste el turno!");
-        }
+        } while (entradaValida && player.getPoints() <= 21);
     }
 
-    public void dealInitialCards(Player player) {
+    private void dealInitialCards(Player player) {
         for (int i = 0; i < 2; i++) {
             Card card = deck.drawRandomCard();
             player.addCardToHand(card);
         }
+        player.calculatePoints();
     }
 
-    public void determineWinner(Player currentPlayer) {
-        int currentPlayerPoints = currentPlayer.getPoints();
-        System.out.println("Player Points: " + currentPlayerPoints);
-        Player winner = null;
-        boolean isTie = false;
-        for (Player otherPlayer : players) {
-            if (!currentPlayer.equals(otherPlayer)) {
-                int otherPlayerPoints = otherPlayer.getPoints();
-                System.out.println("Puntos de " + otherPlayer.getName() + ": " + otherPlayerPoints);
+    public void determineWinner() {
 
-                if (otherPlayerPoints > 21) {
-                    System.out.println(otherPlayer.getName() + " se pasa de 21. ¡Pierde!");
-                } else if (otherPlayerPoints == 21) {
-                    System.out.println(otherPlayer.getName() + " tiene Blackjack. ¡Gana!");
-                } else {
-                    if (currentPlayerPoints > otherPlayerPoints) {
-                        winner = currentPlayer;
-                        System.out.println(currentPlayer.getName() + " gana contra " + otherPlayer.getName() + "!");
-                    } else if (currentPlayerPoints == otherPlayerPoints) {
-                        isTie = true;
-                        System.out.println("Es un empate entre " + currentPlayer.getName() + " y " + otherPlayer.getName() + "!");
-                    } else {
-                        winner = otherPlayer;
-                        System.out.println(otherPlayer.getName() + " Gana contra " + currentPlayer.getName() + "!");
-                    }
-                }
-            }
-        }
-        if (isTie && winner == null) {
-            System.out.println("Es un empate entre " + currentPlayer.getName() + " y otros jugadores.");
-        } else if (isTie) {
-            System.out.println("Es un empate entre " + currentPlayer.getName() + " y " + winner.getName() + ".");
-        } else if (winner != null) {
-            System.out.println(winner.getName() + " es el ganador de la ronda.");
-        }
     }
+
 
     public boolean isGameOver() {
-        return false;
+        return currentRound >=2;
     }
 
     public Player determineOverallWinner() {
-        Player overallWinner = null;
-        int highestPoints = 0;
-        for (Player player : players) {
-            if (player.getPoints() > highestPoints) {
-                highestPoints = player.getPoints();
-                overallWinner = player;
-            } else if (player.getPoints() == highestPoints) {
-                overallWinner = null;
-            }
-        }
-
-        return overallWinner;
+        return null;
     }
 
     public void displayGameStatus() {
         System.out.println("Estado actual del juego:");
 
         for (Player player : players) {
-            System.out.print("Mano de " + player.getName() + ": ");
+            System.out.println("Mano de " + player.getName() + ": ");
             for (Card card : player.getHand()) {
                 if (card != null) {
-                    System.out.print(card + " ");
+                    System.out.println(card + " ");
                 }
             }
             System.out.println("\nPuntos de " + player.getName() + ": " + player.getPoints());
             System.out.println("-------------------------------------");
         }
-
-        System.out.println("Estado del mazo:");
-        for (Card card : deck.getCards()) {
-            if (card != null) {
-                System.out.print(card + " ");
-            }
-        }
-        System.out.println("\n-------------------------------------");
     }
 
-
+    private void displayPlayerHand(Player player) {
+        System.out.println("Cartas iniciales de " + player.getName() + ": ");
+        for (Card card : player.getHand()) {
+            if (card != null) {
+                System.out.println(card + " ");
+            }
+        }
+        System.out.println("\nPuntos de " + player.getName() + ": " + player.getPoints());
+        System.out.println("-------------------------------------");
+    }
     public void endGame() {
 
         for (Player player : players) {
