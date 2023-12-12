@@ -6,6 +6,7 @@ public class Player {
     private String name;
     private Card[] hand;
     private int points;
+    private int roundWins;
 
     public Player(String name) {
         this.name = name;
@@ -37,6 +38,14 @@ public class Player {
         this.points = points;
     }
 
+    public int getRoundWins() {
+        return roundWins;
+    }
+
+    public void setRoundWins(int roundWins) {
+        this.roundWins = roundWins;
+    }
+
     public void addCardToHand(Card card) {
         for (int i = 0; i < hand.length; i++) {
             if (hand[i] == null) {
@@ -48,11 +57,34 @@ public class Player {
 
     public void calculatePoints() {
         points = 0;
+        int numAces = 0;
         for (Card card : hand) {
             if (card != null) {
-                points += card.getValue();
+                int cardValue = card.getValue();
+                if (cardValue > 10) {
+                    cardValue = 10;
+                }
+                points += cardValue;
+                if (cardValue == 1) {
+                    if (points + 10 <= 21) {
+                        points += 10;
+                        numAces++;
+                    }
+                }
             }
         }
+        while (numAces > 0 && points > 21) {
+            points -= 10;
+            numAces--;
+        }
+    }
+
+    public void resetHand() {
+        hand = new Card[10];
+    }
+
+    public void incrementRoundWins() {
+        roundWins++;
     }
 
     @Override
@@ -61,9 +93,5 @@ public class Player {
         if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;
         return Objects.equals(name, player.name);
-    }
-
-    public void resetHand() {
-        hand = new Card[10];
     }
 }
