@@ -33,12 +33,30 @@ public class Card {
 
     @Override
     public String toString() {
+        String faceValue;
+        switch (value) {
+            case 1:
+                faceValue = "A";
+                break;
+            case 11:
+                faceValue = "Q";
+                break;
+            case 12:
+                faceValue = "J";
+                break;
+            case 13:
+                faceValue = "K";
+                break;
+            default:
+                faceValue = String.valueOf(value);
+        }
+
         return "┌─────────┐\n" +
-                String.format("│ %-2s      │\n", value) +
+                String.format("│ %-2s      │\n", faceValue) +
                 "│         │\n" +
                 String.format("│    %s    │\n", suit) +
                 "│         │\n" +
-                String.format("│      %-2s │\n", value) +
+                String.format("│      %-2s │\n", faceValue) +
                 "└─────────┘";
     }
 

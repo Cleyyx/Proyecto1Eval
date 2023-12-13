@@ -46,6 +46,11 @@ public class Player {
         this.roundWins = roundWins;
     }
 
+    /**
+     * Añade una carta a la mano del jugador.
+     *
+     * @param card Carta a añadir a la mano del jugador.
+     */
     public void addCardToHand(Card card) {
         for (int i = 0; i < hand.length; i++) {
             if (hand[i] == null) {
@@ -55,6 +60,9 @@ public class Player {
         }
     }
 
+    /**
+     * Calcula la puntuación del jugador teniendo en cuenta el valor de una carta
+     */
     public void calculatePoints() {
         points = 0;
         int numAces = 0;
@@ -73,16 +81,18 @@ public class Player {
                 }
             }
         }
-        while (numAces > 0 && points > 21) {
-            points -= 10;
-            numAces--;
-        }
     }
 
+    /**
+     * Reinicia la mano del jugador, eliminando todas las cartas.
+     */
     public void resetHand() {
         hand = new Card[10];
     }
 
+    /**
+     * Incrementa el contador de victorias de rondas del jugador.
+     */
     public void incrementRoundWins() {
         roundWins++;
     }

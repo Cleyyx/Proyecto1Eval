@@ -17,6 +17,9 @@ public class Deck {
         this.cards = cards;
     }
 
+    /**
+     * Llena el mazo con 52 cartas, una por cada combinación de valor y palo.
+     */
     public void getCard() {
         for (int i = 0; i < cards.length; i++) {
             String[] palos = {"♦", "♥", "♠", "♣"};
@@ -31,6 +34,11 @@ public class Deck {
         }
     }
 
+    /**
+     * Extrae una carta aleatoria del mazo.
+     *
+     * @return La carta extraída.
+     */
     public Card drawRandomCard() {
         if (isEmpty()) {
             System.out.println("El mazo está vacio, no puedes extraer mas cartas.");
@@ -46,6 +54,11 @@ public class Deck {
         return card;
     }
 
+    /**
+     * Verifica si el mazo está vacío.
+     *
+     * @return true si el mazo está vacío, false en caso contrario.
+     */
     public boolean isEmpty() {
         for (Card card : cards) {
             if (card != null) {

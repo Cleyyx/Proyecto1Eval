@@ -4,6 +4,13 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class IO {
+
+    /**
+     * Lee un entero desde la entrada ingresada por el usuario con manejo de errores.
+     *
+     * @param msg Mensaje que solicita la entrada del usuario.
+     * @return Entero ingresado por el usuario.
+     */
     public static int readInt(String msg) {
         Scanner teclado = new Scanner(System.in);
         boolean isValidInput = false;
@@ -22,6 +29,12 @@ public class IO {
         return value;
     }
 
+    /**
+     * Lee una cadena desde la entrada ingresada por el usuario con manejo de errores.
+     *
+     * @param msg Mensaje que solicita la entrada del usuario.
+     * @return Cadena ingresada por el usuario.
+     */
     public static String readString(String msg) {
         Scanner teclado = new Scanner(System.in);
         String value = "";

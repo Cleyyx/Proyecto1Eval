@@ -3,18 +3,30 @@ package View;
 import java.util.Scanner;
 
 public class Menu {
-    public int step1_SelectNPlayers() {
+
+    /**
+     * Paso 1: Seleccionar el número de jugadores.
+     *
+     * @return Número de jugadores ingresado por el usuario.
+     */
+    public static int step1_SelectNPlayers() {
         int numPlayers;
         do {
-            numPlayers = IO.readInt("Ingresa el número de jugadores: ");
-            if (numPlayers > 4) {
-                System.out.println("El número de jugadores se limita a 4. Por favor, ingresa un valor válido.");
+            numPlayers = IO.readInt("Ingresa el número de jugadores (mínimo 2 y máximo 4): ");
+            if (numPlayers < 2 || numPlayers > 4) {
+                System.out.println("El número de jugadores debe estar entre 2 y 4. Por favor, ingresa un valor válido.");
             }
-        } while (numPlayers > 4);
+        } while (numPlayers < 2 || numPlayers > 4);
         return numPlayers;
     }
 
-    public String[] step2_SelectPlayerNames(int n) {
+    /**
+     * Paso 2: Seleccionar los nombres de los jugadores.
+     *
+     * @param n Número de jugadores.
+     * @return Arreglo de nombres de jugadores.
+     */
+    public static String[] step2_SelectPlayerNames(int n) {
         String[] playerNames = new String[n];
         for (int i = 0; i < n; i++) {
             String playerName;
@@ -36,7 +48,14 @@ public class Menu {
         return playerNames;
     }
 
-    public boolean isUniquePlayerName(String[] existingNames, String newName) {
+    /**
+     * Verifica si un nombre de jugador es único.
+     *
+     * @param existingNames Arreglo de nombres existentes.
+     * @param newName       Nuevo nombre a verificar.
+     * @return true si el nombre es único, false si ya está en uso.
+     */
+    public static boolean isUniquePlayerName(String[] existingNames, String newName) {
         boolean isUnique = true;
         for (String name : existingNames) {
             if (newName.equalsIgnoreCase(name)) {

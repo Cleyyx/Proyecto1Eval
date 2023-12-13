@@ -20,14 +20,14 @@ public class GameController {
 
     }
 
+    /**
+     * Inicia el juego de blackjack.
+     */
     public void startGame() {
         System.out.println("Bienvenido al juego de blackjack!");
-
-        Menu menu = new Menu();
-
-        int numPlayers = menu.step1_SelectNPlayers();
-        String[] playerNames = menu.step2_SelectPlayerNames(numPlayers);
-
+        int numPlayers = Menu.step1_SelectNPlayers();
+        String[] playerNames = Menu.step2_SelectPlayerNames(numPlayers);
+        IO.readString("Presiona cualquier tecla para continuar...");
         players = new Player[numPlayers];
 
         for (int i = 0; i < numPlayers; i++) {
@@ -42,7 +42,9 @@ public class GameController {
         gameController.endGame();
     }
 
-
+    /**
+     * Juega múltiples rondas hasta que se cumple la condición de finalización del juego.
+     */
     public void playRounds() {
         currentRound = 0;
         while (!isGameOver()) {
@@ -52,15 +54,24 @@ public class GameController {
             displayGameStatus();
 
             determineWinner();
+            IO.readString("Presiona cualquier tecla para continuar...");
         }
     }
 
+    /**
+     * Cada jugador juega un turno cada ronda
+     */
     public void playSingleRound() {
         for (Player player : players) {
             playRound(player);
         }
     }
 
+    /**
+     * Juega un turno para un jugador específico.
+     *
+     * @param currentPlayer Jugador para el cual se juega el turno.
+     */
     public void playRound(Player currentPlayer) {
         System.out.println("Comienza el turno para " + currentPlayer.getName());
         currentPlayer.resetHand();
@@ -70,8 +81,14 @@ public class GameController {
 
         playerTurn(currentPlayer);
         currentPlayer.calculatePoints();
+        IO.readString("Presiona cualquier tecla para continuar...");
     }
 
+    /**
+     * Maneja el turno de un jugador, permitiéndole pedir cartas o quedarse.
+     *
+     * @param currentPlayer Jugador cuyo turno se está manejando.
+     */
     public void playerTurn(Player currentPlayer) {
         boolean ValidEntrance = true;
 
@@ -96,6 +113,11 @@ public class GameController {
         } while (ValidEntrance && currentPlayer.getPoints() <= 21);
     }
 
+    /**
+     * Muestra la mano actual de un jugador, incluyendo las cartas iniciales y la puntuación.
+     *
+     * @param player Jugador cuya mano se va a mostrar.
+     */
     public void displayPlayerHand(Player player) {
         System.out.println("Cartas iniciales de " + player.getName() + ": ");
         for (Card card : player.getHand()) {
@@ -107,6 +129,11 @@ public class GameController {
         System.out.println("-------------------------------------");
     }
 
+    /**
+     * Reparte cartas iniciales a un jugador.
+     *
+     * @param player Jugador al que se le reparten las cartas iniciales.
+     */
     public void dealInitialCards(Player player) {
         for (int i = 0; i < 2; i++) {
             Card card = deck.drawRandomCard();
@@ -115,6 +142,9 @@ public class GameController {
         player.calculatePoints();
     }
 
+    /**
+     * Determina el ganador de la ronda.
+     */
     public void determineWinner() {
         boolean allBust = true;
         for (Player player : players) {
@@ -151,10 +181,20 @@ public class GameController {
         }
     }
 
+    /**
+     * Verifica si el juego ha llegado a su fin.
+     *
+     * @return true si el juego ha terminado, false de lo contrario.
+     */
     public boolean isGameOver() {
         return currentRound >= 3;
     }
 
+    /**
+     * Determina el ganador general del juego.
+     *
+     * @return Jugador que ha ganado el juego, o null en caso de empate.
+     */
     public Player determineOverallWinner() {
         Player overallWinner = null;
         int maxRoundWins = 0;
@@ -169,6 +209,9 @@ public class GameController {
         return overallWinner;
     }
 
+    /**
+     * Muestra el estado actual del juego, incluyendo la mano de cada jugador y sus puntos.
+     */
     public void displayGameStatus() {
         System.out.println("Estado actual del juego:");
 
@@ -184,6 +227,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Finaliza el juego, muestra los puntos finales de cada jugador y anuncia al ganador o empate.
+     */
     public void endGame() {
         for (Player player : players) {
             System.out.println("Los puntos finales de " + player.getName() + " son: " + player.getPoints());
