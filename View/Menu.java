@@ -1,5 +1,7 @@
 package View;
 
+import java.util.Scanner;
+
 public class Menu {
     public int step1_SelectNPlayers() {
         int numPlayers;

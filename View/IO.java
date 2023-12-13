@@ -11,7 +11,7 @@ public class IO {
 
         while (!isValidInput) {
             try {
-                System.out.print(msg+ " ");
+                System.out.print(msg + " ");
                 value = teclado.nextInt();
                 isValidInput = true;
             } catch (InputMismatchException e) {
@@ -29,7 +29,7 @@ public class IO {
 
         while (!isValidInput) {
             try {
-                System.out.print(msg +" ");
+                System.out.print(msg + " ");
                 value = teclado.nextLine();
                 isValidInput = true;
             } catch (InputMismatchException e) {

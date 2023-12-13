@@ -1,7 +1,7 @@
-import Model.Game;
+import Controller.GameController;
 
 public class Main {
     public static void main(String[] args) {
-        new Game().startGame();
+        new GameController().startGame();
     }
 }

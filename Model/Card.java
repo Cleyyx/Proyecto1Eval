@@ -6,13 +6,13 @@ public class Card {
     private int value;
     private String suit;
 
-    public Card(int value, String suit){
-        this.value=value;
-        this.suit=suit;
+    public Card(int value, String suit) {
+        this.value = value;
+        this.suit = suit;
     }
 
-    public Card(){
-        this(-1,"");
+    public Card() {
+        this(-1, "");
     }
 
     public int getValue() {

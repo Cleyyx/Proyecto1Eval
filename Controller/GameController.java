@@ -1,19 +1,22 @@
-package Model;
+package Controller;
 
+import Model.Card;
+import Model.Deck;
+import Model.Player;
 import View.IO;
 import View.Menu;
 
-public class Game {
+public class GameController {
     private Player[] players;
     private Deck deck;
     private int currentRound;
 
-    public Game(Player[] players, Deck deck) {
+    public GameController(Player[] players, Deck deck) {
         this.players = players;
         this.deck = deck;
     }
 
-    public Game() {
+    public GameController() {
 
     }
 
@@ -33,12 +36,10 @@ public class Game {
 
         Deck deck = new Deck(new Card[52]);
         deck.getCard();
+        GameController gameController = new GameController(players, deck);
 
-        Game game = new Game(players, deck);
-
-        game.playRounds();
-
-        game.endGame();
+        gameController.playRounds();
+        gameController.endGame();
     }
 
 
@@ -138,7 +139,6 @@ public class Game {
         }
         for (Player player : players) {
             if (player.getPoints() == winningPoints && player != roundWinner) {
-                // Empate, ambos jugadores tienen la misma puntuación
                 System.out.println("Empate en esta ronda entre " + roundWinner.getName() + " y " + player.getName() + ". Nadie gana.");
                 return;
             }
